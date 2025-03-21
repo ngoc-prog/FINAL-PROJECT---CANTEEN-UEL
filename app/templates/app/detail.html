@@ -1,0 +1,399 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block register %}
+<div class="container py-5">
+    {% for product in products %}
+    <div class="card shadow-lg rounded-lg border-0 mb-5">
+        <div class="row no-gutters">
+            <!-- Product Image Column -->
+            <aside class="col-lg-5 border-right">
+                <article class="gallery-wrap p-4"> 
+                    <div class="img-big-wrap bg-light rounded-lg d-flex align-items-center justify-content-center" style="min-height: 420px;">
+                        <a href="#" class="text-center">
+                            <img src="{{ product.ImageURL }}" alt="{{ product.name }}" class="img-fluid p-3" style="max-height: 400px; object-fit: contain;">
+                        </a>
+                    </div>
+                    <!-- Thumbnail gallery with hover effects -->
+                    <div class="thumbs-gallery mt-4 d-flex justify-content-center">
+                        <a href="#" class="item-thumb mx-2 border rounded p-1 active shadow-sm transition-all">
+                            <img src="{{ product.ImageURL }}" width="60" height="60" style="object-fit: cover;" class="rounded">
+                        
+                        </a>
+                    </div>
+                </article>
+            </aside>
+            
+            <!-- Product Details Column -->
+            <aside class="col-lg-7">
+                <article class="card-body p-5">
+                    <!-- Header Section with Product Name and Availability -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h2 class="title font-weight-bold text-dark">{{ product.name }}</h2>
+                        <span class="badge badge-success p-2 rounded-pill"><i class="fas fa-check-circle mr-1"></i> Có sẵn</span>
+                    </div>
+                    
+                    <!-- Rating Section with improved visual -->
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="ratings mr-2">
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star-half-alt text-warning"></i>
+                        </div>
+                        <span class="text-muted small">4.5 (111 đánh giá)</span>
+                        <a href="#feedback-section" class="ml-3 small text-primary">Xem đánh giá</a>
+                    </div>
+                    
+                    <!-- Price Section with improved styling -->
+                    <div class="mb-4 bg-light p-3 rounded-lg">
+                        <p class="price-detail-wrap mb-1"> 
+                            <span class="price h3 text-primary font-weight-bold"> 
+                                <span id="product-price" class="num" data-base-price="{{ product.price }}">
+                                    {{ product.price|floatformat:3 }} VND
+                                </span>
+                            </span> 
+                            <span class="text-muted">/phần</span> 
+                        </p>
+                        <p class="text-success small mb-0"><i class="fas fa-tags mr-1"></i> Ưu đãi đặc biệt: Giảm 10% khi mua từ 5 sản phẩm</p>
+                    </div>
+                    
+                    <!-- Description Section with better formatting -->
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold border-bottom pb-2"> Mô tả sản phẩm</h5>
+                        <p class="text-muted">{{ product.detail }}</p>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <!-- Options Section -->
+                    <div class="row mb-4">
+                        <!-- Delivery Option with icon -->
+                        <div class="col-md-6 mb-3">
+                            <label class="font-weight-bold d-flex align-items-center">
+                                <i class="fas fa-truck mr-2 text-primary"></i> Phương thức nhận hàng
+                            </label>
+                            <select class="form-control custom-select shadow-sm" id="delivery-method">
+                                <option value="dine_in">Ăn tại chỗ</option>
+                                <option value="delivery">Giao hàng tận nơi</option>
+                                <option value="pickup">Đặt trước và lấy đi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    
+
+                    <!-- Quantity Selection with improved styling -->
+                    <div class="d-flex align-items-center mb-4">
+                        <label class="font-weight-bold d-flex align-items-center mr-3 mb-0">
+                            <i class="fas fa-cubes mr-2 text-primary">  </i> Số lượng:
+                        </label>
+                        <div class="input-group shadow-sm" style="width: 150px;">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary" type="button" id="button-minus"> <i class="fas fa-minus"></i> </button>
+                            </div>
+                            <input type="text" class="form-control text-center font-weight-bold" value="1" id="quantity" min="1">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="button" id="button-plus"> <i class="fas fa-plus"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart & Buy Now Buttons with improved styling -->
+                    <div class="mb-3">
+                        <button data-product="{{ product.id }}" data-action="add" class="btn btn-primary update-cart">
+                            <i class="fas fa-cart-plus me-2"></i>Thêm vào giỏ
+                        </button>
+                        <a class="btn btn-outline-success" href="{% url 'checkout' %}?id={{ product.id }}">
+                            <i class="fas fa-eye me-2"></i> Mua ngay
+                        </a>
+                    </div>
+                    
+                    <!-- Additional Product Benefits -->
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="d-flex align-items-center text-muted">
+                                    <i class="fas fa-shield-alt text-success mr-2"></i>
+                                    <span>  Bảo đảm chất lượng</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="d-flex align-items-center text-muted">
+                                    <i class="fas fa-sync-alt text-success mr-2"></i>
+                                    <span>  Đổi trả trong 24h</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="d-flex align-items-center text-muted">
+                                    <i class="fas fa-truck text-success mr-2"></i>
+                                    <span>  Giao hàng nhanh chóng</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </aside>
+        </div>
+    </div>
+    {% endfor %}
+    
+      <!-- Submit Feedback Form -->
+      <div id="feedback-section" class="mt-5">
+        <h4 class="font-weight-bold mb-4"><i class="fas fa-comments text-primary mr-2"></i> Đánh giá sản phẩm</h4>
+        
+        {% if feedbacks %}
+            {% for feedback in feedbacks %}
+            <div class="card mt-3 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>{{ feedback.user.username }}</strong>
+                        <small class="text-muted">{{ feedback.created_at|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <p class="text-warning mb-2">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= feedback.rating %}
+                                <i class="fa fa-star"></i>
+                            {% else %}
+                                <i class="fa fa-star text-muted"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">{{ feedback.comment }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle mr-2"></i> Chưa có đánh giá nào cho sản phẩm này
+            </div>
+        {% endif %}
+        
+        <!-- Feedback Form -->
+        {% if user.is_authenticated %}
+            <!-- In your detail.html template -->
+<form method="POST" action="{% url 'submit_feedback' %}" class="feedback-form">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{ products.first.id }}">
+    
+    <div class="mb-3">
+        <label class="form-label">Đánh giá của bạn:</label>
+        <select name="rating" class="form-select" required>
+            <option value="">Chọn số sao</option>
+            <option value="5">5 sao</option>
+            <option value="4">4 sao</option>
+            <option value="3">3 sao</option>
+            <option value="2">2 sao</option>
+            <option value="1">1 sao</option>
+        </select>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Nhận xét:</label>
+        <textarea name="comment" class="form-control" rows="3" required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-paper-plane me-2"></i>Gửi đánh giá
+    </button>
+</form>
+        {% endif %}
+    </div>
+    <!-- Related Products Section with improved styling -->
+    <div class="mt-5 pt-3 border-top">
+        <h3 class="mb-4 font-weight-bold"><i class="fas fa-th-large text-primary mr-2"></i> Sản phẩm liên quan</h3>
+        <div class="row">
+            {% for related in related_products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm hover-shadow transition-all">
+                    <div class="position-relative">
+                        <img src="{{ related.ImageURL }}" class="card-img-top" alt="{{ related.name }}" style="height: 180px; object-fit: cover;">
+                        {% if related.discount %}
+                        <div class="position-absolute top-0 right-0 bg-danger text-white py-1 px-2 m-2 rounded">-{{ related.discount }}%</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ related.name }}</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-danger font-weight-bold mb-0">{{ related.price|floatformat:3 }} VND</p>
+                            <div class="ratings">
+                                <i class="fa fa-star text-warning"></i>
+                                <small class="text-muted">{{ related.rating|default:"4.0" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid gap-2 mt-3">
+                            <button data-product="{{ related.id }}" data-action="add" class="btn btn-primary update-cart">
+                                <i class="fas fa-cart-plus me-2"></i>Thêm vào giỏ
+                            </button>
+                            <a class="btn btn-outline-success" href="{% url 'detail' %}?id={{ related.id }}">
+                                <i class="fas fa-eye me-2"></i>Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-2"></i> Không có sản phẩm liên quan nào.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Custom JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const quantityInput = document.getElementById("quantity");
+        const minusButton = document.getElementById("button-minus");
+        const plusButton = document.getElementById("button-plus");
+        const addToCartBtn = document.querySelector(".update-cart"); // Lấy nút "Thêm vào giỏ"
+    
+        if (!quantityInput || !minusButton || !plusButton || !addToCartBtn) {
+            console.error("Không tìm thấy các phần tử cần thiết!");
+            return;
+        }
+    
+        // Hàm cập nhật số lượng khi nhấn nút tăng/giảm
+        function updateQuantity(change) {
+            let currentValue = parseInt(quantityInput.value) || 1;
+            let newValue = currentValue + change;
+    
+            if (newValue < 1) {
+                newValue = 1;
+            }
+    
+            quantityInput.value = newValue;
+            updateTotalPrice();
+            addToCartBtn.setAttribute("data-quantity", newValue); // Đồng bộ data-quantity
+        }
+    
+        // Sự kiện nút tăng
+        plusButton.addEventListener("click", function () {
+            updateQuantity(1);
+        });
+    
+        // Sự kiện nút giảm
+        minusButton.addEventListener("click", function () {
+            updateQuantity(-1);
+        });
+    
+        // Sự kiện nhập tay
+        quantityInput.addEventListener("input", function () {
+            let value = parseInt(quantityInput.value);
+            if (isNaN(value) || value < 1) {
+                quantityInput.value = 1;
+                value = 1;
+            }
+            updateTotalPrice();
+            addToCartBtn.setAttribute("data-quantity", value); // Đồng bộ data-quantity
+        });
+// Hàm cập nhật tổng giá
+function updateTotalPrice() {
+    const basePrice = parseFloat(document.getElementById("product-price").dataset.basePrice) || 0;
+    const sizeModifier = parseFloat(document.querySelector("input[name='size']:checked")?.dataset.priceModifier) || 0;
+    const quantity = parseInt(quantityInput.value) || 1;
+    const totalPrice = (basePrice + sizeModifier) * quantity;
+
+    // Cập nhật hiển thị tổng giá (giả sử bạn có phần tử để hiển thị)
+    document.getElementById("total-price").textContent = totalPrice.toFixed(2); // Ví dụ
+}
+
+        document.querySelectorAll(".size-option").forEach(option => {
+            option.addEventListener("change", updateTotalPrice);
+        });
+
+        // Hover effects for thumbnail images
+        document.querySelectorAll(".item-thumb").forEach(thumb => {
+            thumb.addEventListener("mouseover", function() {
+                document.querySelectorAll(".item-thumb").forEach(t => t.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+
+        updateTotalPrice();
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("submit-feedback").addEventListener("click", function () {
+            const comment = document.getElementById("feedback-comment").value;
+            const rating = document.getElementById("feedback-rating").value;
+            
+            if (comment.trim() === "") {
+                alert("Vui lòng nhập nội dung đánh giá.");
+                return;
+            }
+    
+            // Thêm feedback mới vào danh sách hiển thị
+            const feedbackList = document.getElementById("feedback-list");
+            const newFeedback = document.createElement("div");
+            newFeedback.classList.add("card", "mt-3", "shadow-sm");
+            
+            // Get current date
+            const now = new Date();
+            const dateString = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+            
+            newFeedback.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title mb-1">Người dùng ẩn danh</h5>
+                        <small class="text-muted">${dateString}</small>
+                    </div>
+                    <p class="text-warning mb-2">${"<i class='fa fa-star'></i>".repeat(rating) + "<i class='fa fa-star text-muted'></i>".repeat(5 - rating)}</p>
+                    <p class="card-text">${comment}</p>
+                </div>
+            `;
+            feedbackList.prepend(newFeedback);
+    
+            // Xóa nội dung sau khi gửi
+            document.getElementById("feedback-comment").value = "";
+    
+            // Gửi lên server (giả lập)
+            console.log("Gửi đánh giá:", { comment, rating, date: dateString });
+            
+            // Show confirmation message
+            const confirmationMessage = document.createElement("div");
+            confirmationMessage.classList.add("alert", "alert-success", "mt-3");
+            confirmationMessage.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Cảm ơn bạn đã gửi đánh giá!`;
+            document.querySelector(".form-group").before(confirmationMessage);
+            
+            // Remove confirmation after 3 seconds
+            setTimeout(() => {
+                confirmationMessage.remove();
+            }, 3000);
+        });
+    });
+    
+    // Add CSS for transitions and hover effects
+    document.head.insertAdjacentHTML('beforeend', `
+        <style>
+            .transition-all {
+                transition: all 0.3s ease;
+            }
+            .hover-shadow:hover {
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+                transform: translateY(-3px);
+            }
+            .hover-bg-light:hover {
+                background-color: rgba(0, 123, 255, 0.05);
+            }
+            .item-thumb {
+                transition: all 0.2s ease;
+                opacity: 0.7;
+            }
+            .item-thumb:hover, .item-thumb.active {
+                opacity: 1;
+                border-color: #007bff !important;
+            }
+        </style>
+    `);
+</script>
+
+
+
+{% endblock register %}
